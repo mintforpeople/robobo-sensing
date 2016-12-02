@@ -1,11 +1,6 @@
-package com.mytechia.robobo.framework.sensing.battery;
+package com.mytechia.robobo.framework.sensing.orientation;
 
-import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
-import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
-
-import java.util.HashSet;
-
-import javax.crypto.spec.RC2ParameterSpec;
+import com.mytechia.robobo.framework.IModule;
 
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
@@ -26,28 +21,11 @@ import javax.crypto.spec.RC2ParameterSpec;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-public abstract class ABatteryModule implements IBatteryModule {
-    protected HashSet<IBatteryListener> listeners;
-    protected IRemoteControlModule rcmodule = null;
+public interface IOrientationModule extends IModule {
 
-    @Override
-    public void suscribe(IBatteryListener listener) {
-        listeners.add(listener);
-    }
+    void suscribe(IOrientationListener listener);
+    void unsuscribe(IOrientationListener listener);
 
-    @Override
-    public void unsuscribe(IBatteryListener listener) {
-        listeners.remove(listener);
-    }
 
-    protected void notifyBattery(int level){
-        for (IBatteryListener l : listeners){
-            l.onNewBatteryStatus(level);
-        }
-        if (rcmodule!=null){
-            Status s = new Status("OBOBATTLEV");
-            s.putContents("level",String.valueOf(level));
-            rcmodule.postStatus(s);
-        }
-    }
+
 }

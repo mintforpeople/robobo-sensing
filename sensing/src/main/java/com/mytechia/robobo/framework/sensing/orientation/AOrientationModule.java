@@ -1,11 +1,9 @@
-package com.mytechia.robobo.framework.sensing.battery;
+package com.mytechia.robobo.framework.sensing.orientation;
 
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
 
 import java.util.HashSet;
-
-import javax.crypto.spec.RC2ParameterSpec;
 
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
@@ -26,28 +24,35 @@ import javax.crypto.spec.RC2ParameterSpec;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-public abstract class ABatteryModule implements IBatteryModule {
-    protected HashSet<IBatteryListener> listeners;
-    protected IRemoteControlModule rcmodule = null;
-
+public abstract class AOrientationModule implements IOrientationModule {
+    private HashSet<IOrientationListener> listeners = new HashSet<IOrientationListener>();
+    protected IRemoteControlModule remoteControlModule = null;
     @Override
-    public void suscribe(IBatteryListener listener) {
+    public void suscribe(IOrientationListener listener) {
         listeners.add(listener);
     }
 
     @Override
-    public void unsuscribe(IBatteryListener listener) {
+    public void unsuscribe(IOrientationListener listener) {
         listeners.remove(listener);
     }
 
-    protected void notifyBattery(int level){
-        for (IBatteryListener l : listeners){
-            l.onNewBatteryStatus(level);
+    protected void notifyOrientationChange(float yaw, float pitch, float roll){
+        for (IOrientationListener listener : listeners){
+            listener.onOrientationChanged(yaw, pitch, roll);
         }
-        if (rcmodule!=null){
-            Status s = new Status("OBOBATTLEV");
-            s.putContents("level",String.valueOf(level));
-            rcmodule.postStatus(s);
+
+        if (remoteControlModule != null){
+
+            Status status = new Status("ORIENTATION");
+            status.putContents("yaw",String.valueOf(yaw));
+            status.putContents("pitch",String.valueOf(pitch));
+            status.putContents("roll",String.valueOf(roll));
+
+            remoteControlModule.postStatus(status);
         }
-    }
+
+    };
+
+
 }

@@ -1,1 +1,1 @@
-include ':app', ':sensing'
+include ':app', ':sensing', ':remote-control'
