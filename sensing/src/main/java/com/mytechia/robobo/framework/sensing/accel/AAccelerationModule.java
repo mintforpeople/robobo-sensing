@@ -1,4 +1,4 @@
-package com.mytechia.robobo.framework.sensing.orientation;
+package com.mytechia.robobo.framework.sensing.accel;
 
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
@@ -16,7 +16,7 @@ import java.util.HashSet;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * <p>
- * Robobo Sensing Modules are distributed in the hope that it will be useful,
+ * Robobo Acceleration Module is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
@@ -24,35 +24,40 @@ import java.util.HashSet;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-public abstract class AOrientationModule implements IOrientationModule {
-    private HashSet<IOrientationListener> listeners = new HashSet<IOrientationListener>();
-    protected IRemoteControlModule remoteControlModule = null;
+public abstract class AAccelerationModule implements IAccelerationModule {
+    private HashSet<IAccelerationListener> listeners = new HashSet<IAccelerationListener>();
+    protected IRemoteControlModule rcmodule = null;
+
     @Override
-    public void suscribe(IOrientationListener listener) {
+    public void suscribe(IAccelerationListener listener) {
         listeners.add(listener);
     }
 
     @Override
-    public void unsuscribe(IOrientationListener listener) {
+    public void unsuscribe(IAccelerationListener listener) {
         listeners.remove(listener);
     }
 
-    protected void notifyOrientationChange(float yaw, float pitch, float roll){
-        for (IOrientationListener listener : listeners){
-            listener.onOrientationChanged(yaw, pitch, roll);
+    protected void notifyAccelerationChange(){
+        for (IAccelerationListener listener : listeners){
+            listener.onAccelerationChange();
         }
-
-        if (remoteControlModule != null){
-
-            Status status = new Status("ORIENTATION");
-            status.putContents("yaw",String.valueOf(yaw));
-            status.putContents("pitch",String.valueOf(pitch));
-            status.putContents("roll",String.valueOf(roll));
-
-            remoteControlModule.postStatus(status);
+        if (rcmodule!=null){
+            Status status = new Status("ACCELCHANGE");
+            rcmodule.postStatus(status);
         }
+    }
 
-    };
-
-
+    protected void notifyAcceleration(int xaccel, int yaccel, int zaccel){
+        for (IAccelerationListener listener : listeners){
+            listener.onAcceleration(xaccel, yaccel,zaccel);
+        }
+        if (rcmodule!=null){
+            Status status = new Status("ACCELERATION");
+            status.putContents("xaccel",xaccel+"");
+            status.putContents("yaccel",yaccel+"");
+            status.putContents("zaccel",zaccel+"");
+            rcmodule.postStatus(status);
+        }
+    }
 }

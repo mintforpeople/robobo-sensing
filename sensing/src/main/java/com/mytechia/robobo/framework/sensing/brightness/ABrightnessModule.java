@@ -1,11 +1,9 @@
-package com.mytechia.robobo.framework.sensing.battery;
+package com.mytechia.robobo.framework.sensing.brightness;
 
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
 
 import java.util.HashSet;
-
-import javax.crypto.spec.RC2ParameterSpec;
 
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
@@ -18,7 +16,7 @@ import javax.crypto.spec.RC2ParameterSpec;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * <p>
- * Robobo Sensing Modules Module is distributed in the hope that it will be useful,
+ * Robobo Brightness Module is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
@@ -26,28 +24,56 @@ import javax.crypto.spec.RC2ParameterSpec;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-public abstract class ABatteryModule implements IBatteryModule {
-    protected HashSet<IBatteryListener> listeners = new HashSet<IBatteryListener>();
+public abstract class ABrightnessModule implements IBrightnessModule {
+    private HashSet<IBrightnessListener> listeners;
+
     protected IRemoteControlModule rcmodule = null;
 
+    public ABrightnessModule(){
+        listeners = new HashSet<IBrightnessListener>();
+    }
+
     @Override
-    public void suscribe(IBatteryListener listener) {
+    public void suscribe(IBrightnessListener listener) {
         listeners.add(listener);
     }
 
     @Override
-    public void unsuscribe(IBatteryListener listener) {
-        listeners.remove(listener);
+    public void unsuscribe(IBrightnessListener listener) {
+        if (listeners.contains(listener)){
+            listeners.remove(listener);
+        }
     }
 
-    protected void notifyBattery(int level){
-        for (IBatteryListener l : listeners){
-            l.onNewBatteryStatus(level);
+    /**
+     * Used to notify the listeners of a new value
+     * @param value
+     */
+    protected void notifyBrightness(float value){
+        for (IBrightnessListener listener:listeners){
+            listener.onBrightness(value);
         }
+
         if (rcmodule!=null){
-            Status s = new Status("OBOBATTLEV");
-            s.putContents("level",String.valueOf(level));
+            Status s = new Status("BRIGHTNESS");
+            s.putContents("level",String.valueOf(Math.round(value)));
+            rcmodule.postStatus(s);
+        }
+    }
+
+    /**
+     * Used to notify the listeners of a substantial change on the sensor
+     */
+    protected void notifyBrightnessChange(){
+        for (IBrightnessListener listener:listeners){
+            listener.onBrightnessChanged();
+        }
+
+        if (rcmodule!=null){
+            Status s = new Status("BRIGHTNESSCHANGED");
             rcmodule.postStatus(s);
         }
     }
 }
+
+

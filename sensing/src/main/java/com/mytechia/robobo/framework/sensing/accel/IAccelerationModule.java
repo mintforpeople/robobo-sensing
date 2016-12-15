@@ -1,4 +1,4 @@
-package com.mytechia.robobo.framework.sensing.orientation;
+package com.mytechia.robobo.framework.sensing.accel;
 
 import com.mytechia.robobo.framework.IModule;
 
@@ -13,7 +13,7 @@ import com.mytechia.robobo.framework.IModule;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * <p>
- * Robobo Orientation Module is distributed in the hope that it will be useful,
+ * Robobo Acceleration Module is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
@@ -21,11 +21,23 @@ import com.mytechia.robobo.framework.IModule;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-public interface IOrientationModule extends IModule {
+public interface IAccelerationModule extends IModule {
 
-    void suscribe(IOrientationListener listener);
-    void unsuscribe(IOrientationListener listener);
+    /**
+     * Suscribes a listener to the acceleration information stream
+     * @param listener The listener to be suscribed
+     */
+    void suscribe(IAccelerationListener listener);
 
+    /**
+     * Unsuscribes a listener to the acceleration information stream
+     * @param listener The listener to be suscribed
+     */
+    void unsuscribe(IAccelerationListener listener);
 
-
+    /**
+     * Sets the amount of change required to trigger a detection
+     * @param threshold The amount of change required
+     */
+    void setDetectionThreshold(int threshold);
 }
