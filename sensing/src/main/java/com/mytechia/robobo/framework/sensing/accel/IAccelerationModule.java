@@ -1,6 +1,3 @@
-package com.mytechia.robobo.framework.sensing.accel;
-
-import com.mytechia.robobo.framework.IModule;
 
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
@@ -21,6 +18,15 @@ import com.mytechia.robobo.framework.IModule;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+package com.mytechia.robobo.framework.sensing.accel;
+
+import com.mytechia.robobo.framework.IModule;
+
+
+
+/**
+ * Interface of the ROBOBO acceleration module
+ */
 public interface IAccelerationModule extends IModule {
 
     /**

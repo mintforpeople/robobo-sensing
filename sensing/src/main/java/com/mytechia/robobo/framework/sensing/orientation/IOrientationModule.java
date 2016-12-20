@@ -1,7 +1,3 @@
-package com.mytechia.robobo.framework.sensing.orientation;
-
-import com.mytechia.robobo.framework.IModule;
-
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
  * Copyright 2016 Luis Llamas <luis.llamas@mytechia.com>
@@ -21,9 +17,28 @@ import com.mytechia.robobo.framework.IModule;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+
+package com.mytechia.robobo.framework.sensing.orientation;
+
+import com.mytechia.robobo.framework.IModule;
+
+
+
+/**
+ * Interface of the orientationn sensing module
+ */
 public interface IOrientationModule extends IModule {
 
+    /**
+     * Suscribes a listener to the orientation notifications
+     * @param listener The listener to be added
+     */
     void suscribe(IOrientationListener listener);
+
+    /**
+     * Unsuscribes a listener from the orientation notifications
+     * @param listener The listener to be removed
+     */
     void unsuscribe(IOrientationListener listener);
 
 

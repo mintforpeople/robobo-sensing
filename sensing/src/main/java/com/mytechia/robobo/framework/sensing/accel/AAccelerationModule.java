@@ -1,10 +1,3 @@
-package com.mytechia.robobo.framework.sensing.accel;
-
-import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
-import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
-
-import java.util.HashSet;
-
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
  * Copyright 2016 Luis Llamas <luis.llamas@mytechia.com>
@@ -24,6 +17,19 @@ import java.util.HashSet;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+
+package com.mytechia.robobo.framework.sensing.accel;
+
+import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
+import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
+
+import java.util.HashSet;
+
+
+
+/**
+ * Abstract class managing listeners and status posting
+ */
 public abstract class AAccelerationModule implements IAccelerationModule {
     private HashSet<IAccelerationListener> listeners = new HashSet<IAccelerationListener>();
     protected IRemoteControlModule rcmodule = null;
@@ -38,6 +44,9 @@ public abstract class AAccelerationModule implements IAccelerationModule {
         listeners.remove(listener);
     }
 
+    /**
+     * Notifies a notable change on the acceleration
+     */
     protected void notifyAccelerationChange(){
         for (IAccelerationListener listener : listeners){
             listener.onAccelerationChange();
@@ -48,6 +57,12 @@ public abstract class AAccelerationModule implements IAccelerationModule {
         }
     }
 
+    /**
+     * Streams the acceleration data of the sensor
+     * @param xaccel Acceleration on the x axis
+     * @param yaccel Acceleration on the y axis
+     * @param zaccel Acceleration on the z axis
+     */
     protected void notifyAcceleration(int xaccel, int yaccel, int zaccel){
         for (IAccelerationListener listener : listeners){
             listener.onAcceleration(xaccel, yaccel,zaccel);

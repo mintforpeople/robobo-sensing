@@ -1,12 +1,3 @@
-package com.mytechia.robobo.framework.sensing.battery;
-
-import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
-import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
-
-import java.util.HashSet;
-
-import javax.crypto.spec.RC2ParameterSpec;
-
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
  * Copyright 2016 Luis Llamas <luis.llamas@mytechia.com>
@@ -26,6 +17,20 @@ import javax.crypto.spec.RC2ParameterSpec;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+
+package com.mytechia.robobo.framework.sensing.battery;
+
+import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
+import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
+
+import java.util.HashSet;
+
+import javax.crypto.spec.RC2ParameterSpec;
+
+
+/**
+ * Abstract class managing listeners and status posting
+ */
 public abstract class ABatteryModule implements IBatteryModule {
     protected HashSet<IBatteryListener> listeners = new HashSet<IBatteryListener>();
     protected IRemoteControlModule rcmodule = null;
@@ -40,6 +45,10 @@ public abstract class ABatteryModule implements IBatteryModule {
         listeners.remove(listener);
     }
 
+    /**
+     * Notifies the battery level to the listeners
+     * @param level Actual level of the battery
+     */
     protected void notifyBattery(int level){
         for (IBatteryListener l : listeners){
             l.onNewBatteryStatus(level);

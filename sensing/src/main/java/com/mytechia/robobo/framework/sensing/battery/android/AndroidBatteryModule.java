@@ -1,20 +1,3 @@
-package com.mytechia.robobo.framework.sensing.battery.android;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.BatteryManager;
-
-import com.mytechia.commons.framework.exception.InternalErrorException;
-import com.mytechia.robobo.framework.RoboboManager;
-import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
-import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
-import com.mytechia.robobo.framework.sensing.battery.ABatteryModule;
-import com.mytechia.robobo.framework.sensing.battery.IBatteryModule;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
  * Copyright 2016 Luis Llamas <luis.llamas@mytechia.com>
@@ -34,6 +17,29 @@ import java.util.TimerTask;
  * You should have received a copy of the GNU Lesser General Public License
  * along withRobobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+
+
+package com.mytechia.robobo.framework.sensing.battery.android;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
+
+import com.mytechia.commons.framework.exception.InternalErrorException;
+import com.mytechia.robobo.framework.RoboboManager;
+import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
+import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
+import com.mytechia.robobo.framework.sensing.battery.ABatteryModule;
+import com.mytechia.robobo.framework.sensing.battery.IBatteryModule;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+
+/**
+ * Implementation of the Battery sensor module
+ */
 public class AndroidBatteryModule extends ABatteryModule {
 
     private Context context;

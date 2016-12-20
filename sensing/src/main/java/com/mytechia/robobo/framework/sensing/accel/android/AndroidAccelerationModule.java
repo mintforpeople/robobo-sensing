@@ -1,20 +1,3 @@
-package com.mytechia.robobo.framework.sensing.accel.android;
-
-import android.app.Activity;
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.support.annotation.Nullable;
-import android.util.Log;
-
-import com.mytechia.commons.framework.exception.InternalErrorException;
-import com.mytechia.robobo.framework.RoboboManager;
-import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
-import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
-import com.mytechia.robobo.framework.sensing.accel.AAccelerationModule;
-
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
  * Copyright 2016 Luis Llamas <luis.llamas@mytechia.com>
@@ -34,6 +17,29 @@ import com.mytechia.robobo.framework.sensing.accel.AAccelerationModule;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+
+
+package com.mytechia.robobo.framework.sensing.accel.android;
+
+import android.app.Activity;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.support.annotation.Nullable;
+import android.util.Log;
+
+import com.mytechia.commons.framework.exception.InternalErrorException;
+import com.mytechia.robobo.framework.RoboboManager;
+import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
+import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
+import com.mytechia.robobo.framework.sensing.accel.AAccelerationModule;
+
+
+/**
+ * Implementation of the Acceleration module
+ */
 public class AndroidAccelerationModule extends AAccelerationModule implements SensorEventListener {
 
     private static final int SENSOR_DELAY_MICROS = 50 * 1000; // 50ms

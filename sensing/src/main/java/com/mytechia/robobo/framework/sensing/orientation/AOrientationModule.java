@@ -1,10 +1,3 @@
-package com.mytechia.robobo.framework.sensing.orientation;
-
-import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
-import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
-
-import java.util.HashSet;
-
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
  * Copyright 2016 Luis Llamas <luis.llamas@mytechia.com>
@@ -24,6 +17,18 @@ import java.util.HashSet;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+
+package com.mytechia.robobo.framework.sensing.orientation;
+
+import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
+import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
+
+import java.util.HashSet;
+
+
+/**
+ * Abstract class managing listeners and status posting
+ */
 public abstract class AOrientationModule implements IOrientationModule {
     private HashSet<IOrientationListener> listeners = new HashSet<IOrientationListener>();
     protected IRemoteControlModule remoteControlModule = null;
@@ -37,6 +42,12 @@ public abstract class AOrientationModule implements IOrientationModule {
         listeners.remove(listener);
     }
 
+    /**
+     * Notifies a change on the orientation
+     * @param yaw Orientation at yaw axis
+     * @param pitch Orientation at pitch axis
+     * @param roll Orientation at roll axis
+     */
     protected void notifyOrientationChange(float yaw, float pitch, float roll){
         for (IOrientationListener listener : listeners){
             listener.onOrientationChanged(yaw, pitch, roll);

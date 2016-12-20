@@ -1,22 +1,3 @@
-package com.mytechia.robobo.framework.sensing.brightness.android;
-
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.util.Log;
-
-import com.mytechia.commons.framework.exception.InternalErrorException;
-import com.mytechia.robobo.framework.RoboboManager;
-import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
-import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
-import com.mytechia.robobo.framework.sensing.brightness.ABrightnessModule;
-
-import java.sql.Time;
-import java.util.Timer;
-import java.util.TimerTask;
-
 
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
@@ -38,6 +19,30 @@ import java.util.TimerTask;
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
+package com.mytechia.robobo.framework.sensing.brightness.android;
+
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.util.Log;
+
+import com.mytechia.commons.framework.exception.InternalErrorException;
+import com.mytechia.robobo.framework.RoboboManager;
+import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
+import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
+import com.mytechia.robobo.framework.sensing.brightness.ABrightnessModule;
+
+import java.sql.Time;
+import java.util.Timer;
+import java.util.TimerTask;
+
+
+
+/**
+ * Implementation of the brightness sensing module
+ */
 public class AndroidBrightnessModule extends ABrightnessModule {
 
     private Context context;

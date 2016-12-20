@@ -1,8 +1,3 @@
-package com.mytechia.robobo.framework.sensing.brightness;
-
-import com.mytechia.robobo.framework.IModule;
-
-
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
  * Copyright 2016 Luis Llamas <luis.llamas@mytechia.com>
@@ -23,6 +18,16 @@ import com.mytechia.robobo.framework.IModule;
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
+
+package com.mytechia.robobo.framework.sensing.brightness;
+
+import com.mytechia.robobo.framework.IModule;
+
+
+
+/**
+ * Interface of the brightness sensing module
+ */
 public interface IBrightnessModule extends IModule {
 
     /**

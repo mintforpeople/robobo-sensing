@@ -1,4 +1,3 @@
-package com.mytechia.robobo.framework.sensing.battery;
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
  * Copyright 2016 Luis Llamas <luis.llamas@mytechia.com>
@@ -18,6 +17,17 @@ package com.mytechia.robobo.framework.sensing.battery;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Sensing Modules.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+
+package com.mytechia.robobo.framework.sensing.battery;
+
+
+/**
+ * Listener receiving the battery statuses
+ */
 public interface IBatteryListener {
+    /**
+     * Called when a new battery status arrives
+     * @param battlevel
+     */
     void onNewBatteryStatus(int battlevel);
 }

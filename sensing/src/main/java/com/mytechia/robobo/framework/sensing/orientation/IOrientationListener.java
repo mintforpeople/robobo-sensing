@@ -1,4 +1,3 @@
-package com.mytechia.robobo.framework.sensing.orientation;
 
 /*******************************************************************************
  * Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
@@ -19,7 +18,20 @@ package com.mytechia.robobo.framework.sensing.orientation;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Remote Control Module.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+
+
+package com.mytechia.robobo.framework.sensing.orientation;
+
+/**
+ * Listener for the orientation changes
+ */
 public interface IOrientationListener {
 
+    /**
+     * Called when the orientation changes
+     * @param yaw Orientation at yaw axis
+     * @param pitch Orientation at pitch axis
+     * @param roll Orientation at roll axis
+     */
     void onOrientationChanged(float yaw, float pitch, float roll);
 }
