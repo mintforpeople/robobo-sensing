@@ -76,7 +76,7 @@ public class AndroidOrientationModule extends AOrientationModule implements Sens
 
     @Override
     public void shutdown() throws InternalErrorException {
-
+        mSensorManager.unregisterListener(this);
     }
 
     @Override

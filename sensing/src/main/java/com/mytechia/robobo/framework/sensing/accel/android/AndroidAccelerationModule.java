@@ -85,6 +85,7 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
 
     @Override
     public void shutdown() throws InternalErrorException {
+        mSensorManager.unregisterListener(this);
 
     }
 

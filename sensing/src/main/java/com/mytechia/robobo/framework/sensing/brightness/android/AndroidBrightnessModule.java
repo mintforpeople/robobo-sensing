@@ -110,7 +110,8 @@ public class AndroidBrightnessModule extends ABrightnessModule {
 
     @Override
     public void shutdown() throws InternalErrorException {
-
+        brightnessTimer.cancel();
+        brightnessTimer.purge();
     }
 
     @Override

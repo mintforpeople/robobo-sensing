@@ -62,7 +62,8 @@ public class AndroidBatteryModule extends ABatteryModule {
 
     @Override
     public void shutdown() throws InternalErrorException {
-
+        batterytimer.cancel();
+        batterytimer.purge();
     }
 
     @Override
