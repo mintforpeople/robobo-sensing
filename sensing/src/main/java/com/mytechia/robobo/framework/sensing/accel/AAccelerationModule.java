@@ -72,7 +72,7 @@ public abstract class AAccelerationModule implements IAccelerationModule {
             status.putContents("xaccel",xaccel+"");
             status.putContents("yaccel",yaccel+"");
             status.putContents("zaccel",zaccel+"");
-            rcmodule.postStatus(status);
+            //rcmodule.postStatus(status); --> NO STATUS SENT
         }
     }
 }

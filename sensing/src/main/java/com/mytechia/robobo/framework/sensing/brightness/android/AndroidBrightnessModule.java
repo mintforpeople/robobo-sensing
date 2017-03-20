@@ -57,7 +57,7 @@ public class AndroidBrightnessModule extends ABrightnessModule {
 
     private Timer brightnessTimer;
 
-    private int refreshRate = 100;
+    private int refreshRate = 250; //4 per second
 
     private BrightnessTask task;
 
