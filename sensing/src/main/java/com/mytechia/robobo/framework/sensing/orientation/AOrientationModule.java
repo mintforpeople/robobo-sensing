@@ -20,6 +20,7 @@
 
 package com.mytechia.robobo.framework.sensing.orientation;
 
+import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
 
@@ -32,6 +33,7 @@ import java.util.HashSet;
 public abstract class AOrientationModule implements IOrientationModule {
     private HashSet<IOrientationListener> listeners = new HashSet<IOrientationListener>();
     protected IRemoteControlModule remoteControlModule = null;
+    protected RoboboManager m;
     @Override
     public void suscribe(IOrientationListener listener) {
         listeners.add(listener);

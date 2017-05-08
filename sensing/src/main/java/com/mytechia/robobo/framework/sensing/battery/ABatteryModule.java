@@ -20,6 +20,7 @@
 
 package com.mytechia.robobo.framework.sensing.battery;
 
+import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
 
@@ -34,7 +35,7 @@ import javax.crypto.spec.RC2ParameterSpec;
 public abstract class ABatteryModule implements IBatteryModule {
     protected HashSet<IBatteryListener> listeners = new HashSet<IBatteryListener>();
     protected IRemoteControlModule rcmodule = null;
-
+    protected RoboboManager m;
     @Override
     public void suscribe(IBatteryListener listener) {
         listeners.add(listener);

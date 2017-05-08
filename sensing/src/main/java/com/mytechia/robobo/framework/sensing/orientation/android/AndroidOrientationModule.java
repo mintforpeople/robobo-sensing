@@ -32,6 +32,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.mytechia.commons.framework.exception.InternalErrorException;
+import com.mytechia.robobo.framework.LogLvl;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
@@ -55,16 +56,21 @@ public class AndroidOrientationModule extends AOrientationModule implements Sens
 
     private int mLastAccuracy;
 
+    private int lastyaw =0;
+    private int lastroll = 0;
+    private int lastpitch = 0;
+
     private Context context;
     @Override
     public void startup(RoboboManager manager){
+        m = manager;
 
         context = manager.getApplicationContext();
 
         try {
             remoteControlModule = manager.getModuleInstance(IRemoteControlModule.class);
         } catch (ModuleNotFoundException e) {
-            Log.d(TAG,"Remote module not available, not using it");
+            m.log(LogLvl.WARNING, TAG,"Remote module not available, not using it");
         }
 
         mSensorManager = (SensorManager) context.getSystemService(Activity.SENSOR_SERVICE);
@@ -81,12 +87,12 @@ public class AndroidOrientationModule extends AOrientationModule implements Sens
 
     @Override
     public String getModuleInfo() {
-        return null;
+        return "Orientation Module";
     }
 
     @Override
     public String getModuleVersion() {
-        return null;
+        return "0.3.0";
     }
 
 
@@ -133,7 +139,14 @@ public class AndroidOrientationModule extends AOrientationModule implements Sens
         float pitch = orientation[1] * -57;
         float roll = orientation[2] * -57;
 
+
         //Log.d(TAG,rotationVector.toString());
-        notifyOrientationChange(yaw, pitch, roll);
+
+        if ((Math.round(yaw) != lastyaw)||(Math.round(pitch) != lastpitch)||(Math.round(roll) != lastroll)) {
+            notifyOrientationChange(yaw, pitch, roll);
+            lastpitch = Math.round(pitch);
+            lastroll = Math.round(roll);
+            lastyaw = Math.round(yaw);
+        }
     }
 }

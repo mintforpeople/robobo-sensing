@@ -31,6 +31,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.mytechia.commons.framework.exception.InternalErrorException;
+import com.mytechia.robobo.framework.LogLvl;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
@@ -67,12 +68,13 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
 
     @Override
     public void startup(RoboboManager manager) throws InternalErrorException {
+        m = manager;
         context = manager.getApplicationContext();
 
         try {
             rcmodule = manager.getModuleInstance(IRemoteControlModule.class);
         } catch (ModuleNotFoundException e) {
-            Log.d(TAG,"Remote module not available, not using it");
+            m.log(LogLvl.WARNING, TAG,"Remote module not available, not using it");
         }
 
         mSensorManager = (SensorManager) context.getSystemService(Activity.SENSOR_SERVICE);
@@ -91,12 +93,12 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
 
     @Override
     public String getModuleInfo() {
-        return null;
+        return "Acceleration Module";
     }
 
     @Override
     public String getModuleVersion() {
-        return null;
+        return "0.3.0";
     }
 
     @Override
@@ -121,13 +123,16 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
                 notifyAccelerationChange();
             }
 
-            lastx = x;
-            lasty = y;
-            lastz = z;
+
+            if ((Math.round(x)!=Math.round(lastx))||(Math.round(y)!=Math.round(lasty))||(Math.round(z)!=Math.round(lastz))) {
+
+                lastx = x;
+                lasty = y;
+                lastz = z;
 
 
-
-            notifyAcceleration(Math.round(x),Math.round(y),Math.round(z));
+                notifyAcceleration(Math.round(x), Math.round(y), Math.round(z));
+            }
         }
     }
 

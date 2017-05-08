@@ -49,6 +49,7 @@ public class AndroidBatteryModule extends ABatteryModule {
 
     @Override
     public void startup(RoboboManager manager){
+        m = manager;
         context = manager.getApplicationContext();
         batterytimer = new Timer();
         battTimerTask = new checkBatteryLevel();
@@ -69,12 +70,12 @@ public class AndroidBatteryModule extends ABatteryModule {
 
     @Override
     public String getModuleInfo() {
-        return null;
+        return "Battery Module";
     }
 
     @Override
     public String getModuleVersion() {
-        return null;
+        return "0.3.0";
     }
 
     @Override
