@@ -29,6 +29,7 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 import com.mytechia.commons.framework.exception.InternalErrorException;
+import com.mytechia.robobo.framework.LogLvl;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
@@ -57,13 +58,14 @@ public class AndroidBrightnessModule extends ABrightnessModule {
 
     private Timer brightnessTimer;
 
-    private int refreshRate = 100;
+    private int refreshRate = 250; //4 per second
 
     private BrightnessTask task;
 
 
     @Override
     public void startup(RoboboManager manager) throws InternalErrorException {
+        m = manager;
         context = manager.getApplicationContext();
         SensorManager sensorManager
                 = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
@@ -77,7 +79,7 @@ public class AndroidBrightnessModule extends ABrightnessModule {
         }
 
         if (lightSensor == null){
-            Log.e(TAG,"Brightness sensor not present on this device");
+            m.log(LogLvl.ERROR, TAG,"Brightness sensor not present on this device");
         }else {
             float max =  lightSensor.getMaximumRange();
 
@@ -110,7 +112,10 @@ public class AndroidBrightnessModule extends ABrightnessModule {
 
     @Override
     public void shutdown() throws InternalErrorException {
-
+        if (brightnessTimer!=null) {
+            brightnessTimer.cancel();
+            brightnessTimer.purge();
+        }
     }
 
     @Override
@@ -120,7 +125,7 @@ public class AndroidBrightnessModule extends ABrightnessModule {
 
     @Override
     public String getModuleVersion() {
-        return "0.1";
+        return "0.3.0";
     }
 
 

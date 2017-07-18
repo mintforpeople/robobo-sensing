@@ -20,6 +20,7 @@
 
 package com.mytechia.robobo.framework.sensing.brightness;
 
+import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
 
@@ -33,6 +34,7 @@ public abstract class ABrightnessModule implements IBrightnessModule {
     private HashSet<IBrightnessListener> listeners;
 
     protected IRemoteControlModule rcmodule = null;
+    protected RoboboManager m;
 
     public ABrightnessModule(){
         listeners = new HashSet<IBrightnessListener>();

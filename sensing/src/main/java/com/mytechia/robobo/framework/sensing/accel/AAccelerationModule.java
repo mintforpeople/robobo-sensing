@@ -20,6 +20,7 @@
 
 package com.mytechia.robobo.framework.sensing.accel;
 
+import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
 
@@ -33,7 +34,7 @@ import java.util.HashSet;
 public abstract class AAccelerationModule implements IAccelerationModule {
     private HashSet<IAccelerationListener> listeners = new HashSet<IAccelerationListener>();
     protected IRemoteControlModule rcmodule = null;
-
+    protected RoboboManager m;
     @Override
     public void suscribe(IAccelerationListener listener) {
         listeners.add(listener);
@@ -73,6 +74,12 @@ public abstract class AAccelerationModule implements IAccelerationModule {
             status.putContents("yaccel",yaccel+"");
             status.putContents("zaccel",zaccel+"");
             rcmodule.postStatus(status);
+        }
+    }
+
+    protected void notifyCalibrationAngle(double angle){
+        for (IAccelerationListener listener : listeners){
+            listener.onCalibrationAngle(angle);
         }
     }
 }

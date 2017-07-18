@@ -45,13 +45,15 @@ public class AndroidBatteryModule extends ABatteryModule {
     private Context context;
     private Timer batterytimer;
     private TimerTask battTimerTask;
+    private static final int statusPeriod = 30000;
 
     @Override
     public void startup(RoboboManager manager){
+        m = manager;
         context = manager.getApplicationContext();
         batterytimer = new Timer();
         battTimerTask = new checkBatteryLevel();
-        batterytimer.schedule(battTimerTask,1000,1000);
+        batterytimer.schedule(battTimerTask,1000,statusPeriod);
 
         try {
             rcmodule = manager.getModuleInstance(IRemoteControlModule.class);
@@ -62,17 +64,18 @@ public class AndroidBatteryModule extends ABatteryModule {
 
     @Override
     public void shutdown() throws InternalErrorException {
-
+        batterytimer.cancel();
+        batterytimer.purge();
     }
 
     @Override
     public String getModuleInfo() {
-        return null;
+        return "Battery Module";
     }
 
     @Override
     public String getModuleVersion() {
-        return null;
+        return "0.3.0";
     }
 
     @Override
