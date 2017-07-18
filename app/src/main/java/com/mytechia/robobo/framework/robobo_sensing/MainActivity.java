@@ -98,17 +98,17 @@ public class MainActivity extends AppCompatActivity implements IOrientationListe
 
     @Override
     public void onOrientationChanged(final float yaw, final float pitch,final float roll) {
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                //Log.d(TAG,"Yaw: " + yaw + " Pitch: " + pitch + " Roll: " + roll);
-//
-//                yawBar.setProgress(Math.round(yaw+180));
-//                pitchBar.setProgress(Math.round(pitch+180));
-//                rollBar.setProgress(Math.round(roll+180));
-//
-//            }
-//        });
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //Log.d(TAG,"Yaw: " + yaw + " Pitch: " + pitch + " Roll: " + roll);
+
+                yawBar.setProgress(Math.round(yaw+180));
+                pitchBar.setProgress(Math.round(pitch+180));
+                rollBar.setProgress(Math.round(roll+180));
+
+            }
+        });
 
 
 
@@ -149,13 +149,18 @@ public class MainActivity extends AppCompatActivity implements IOrientationListe
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //Log.d(TAG,"Yaw: " + yaw + " Pitch: " + pitch + " Roll: " + roll);
-
-                yawBar.setProgress(Math.round(xaccel));
-                pitchBar.setProgress(Math.round(yaccel));
-                rollBar.setProgress(Math.round(zaccel));
+//                Log.d(TAG," ACCEL X: " + xaccel + " Y: " + yaccel + " Z: " + zaccel);
+//
+//                yawBar.setProgress(Math.round(xaccel));
+//                pitchBar.setProgress(Math.round(yaccel));
+//                rollBar.setProgress(Math.round(zaccel));
 
             }
         });
+    }
+
+    @Override
+    public void onCalibrationAngle(double angle) {
+        Log.w(TAG,angle+"");
     }
 }

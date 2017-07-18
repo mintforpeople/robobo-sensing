@@ -46,4 +46,11 @@ public interface IAccelerationModule extends IModule {
      * @param threshold The amount of change required
      */
     void setDetectionThreshold(int threshold);
+
+    /**
+     * Starts a calibration
+     * @param activate
+     */
+    void setCalibration(boolean activate);
+
 }

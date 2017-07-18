@@ -25,5 +25,6 @@ public interface IAccelerationListener {
 
     void onAccelerationChange();
     void onAcceleration(int xaccel, int yaccel, int zaccel);
+    void onCalibrationAngle(double angle);
 
 }

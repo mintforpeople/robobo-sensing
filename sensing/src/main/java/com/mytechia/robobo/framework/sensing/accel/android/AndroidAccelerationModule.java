@@ -63,6 +63,8 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
     private float lasty = 0;
     private float lastz = 0;
 
+    private boolean calibrating = false;
+
 
 
 
@@ -123,6 +125,11 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
                 notifyAccelerationChange();
             }
 
+//            Log.d(TAG,x+" "+y+" "+" "+z);
+//            Log.d(TAG,""+Math.toDegrees(Math.acos(y/Math.sqrt(x*x+y*y+z*z)))*Math.signum(z));
+            if (calibrating){
+                notifyCalibrationAngle(Math.toDegrees(Math.acos(y/Math.sqrt(x*x+y*y+z*z)))*Math.signum(z));
+            }
 
             if ((Math.round(x)!=Math.round(lastx))||(Math.round(y)!=Math.round(lasty))||(Math.round(z)!=Math.round(lastz))) {
 
@@ -144,5 +151,10 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
     @Override
     public void setDetectionThreshold(int threshold) {
         this.threshold = threshold;
+    }
+
+    @Override
+    public void setCalibration(boolean activate) {
+        calibrating = activate;
     }
 }

@@ -73,7 +73,13 @@ public abstract class AAccelerationModule implements IAccelerationModule {
             status.putContents("xaccel",xaccel+"");
             status.putContents("yaccel",yaccel+"");
             status.putContents("zaccel",zaccel+"");
-            //rcmodule.postStatus(status); --> NO STATUS SENT
+            rcmodule.postStatus(status);
+        }
+    }
+
+    protected void notifyCalibrationAngle(double angle){
+        for (IAccelerationListener listener : listeners){
+            listener.onCalibrationAngle(angle);
         }
     }
 }
