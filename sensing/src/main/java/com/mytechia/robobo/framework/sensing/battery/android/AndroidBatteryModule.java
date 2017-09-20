@@ -45,7 +45,7 @@ public class AndroidBatteryModule extends ABatteryModule {
     private Context context;
     private Timer batterytimer;
     private TimerTask battTimerTask;
-    private static final int statusPeriod = 30000;
+    private static final int statusPeriod = 3000;
 
     @Override
     public void startup(RoboboManager manager){

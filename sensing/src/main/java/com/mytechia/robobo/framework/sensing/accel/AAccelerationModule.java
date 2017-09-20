@@ -23,6 +23,7 @@ package com.mytechia.robobo.framework.sensing.accel;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
+import com.mytechia.robobo.framework.sensing.ASensingModule;
 
 import java.util.HashSet;
 
@@ -31,10 +32,19 @@ import java.util.HashSet;
 /**
  * Abstract class managing listeners and status posting
  */
-public abstract class AAccelerationModule implements IAccelerationModule {
+public abstract class AAccelerationModule extends ASensingModule implements IAccelerationModule {
+
+    private static final long MAX_REMOTE_NOTIFICATION_PERIOD = 250; //ms
+
     private HashSet<IAccelerationListener> listeners = new HashSet<IAccelerationListener>();
     protected IRemoteControlModule rcmodule = null;
     protected RoboboManager m;
+
+
+    public AAccelerationModule() {
+        super(MAX_REMOTE_NOTIFICATION_PERIOD); //max remote update period
+    }
+
     @Override
     public void suscribe(IAccelerationListener listener) {
         listeners.add(listener);
@@ -52,9 +62,10 @@ public abstract class AAccelerationModule implements IAccelerationModule {
         for (IAccelerationListener listener : listeners){
             listener.onAccelerationChange();
         }
-        if (rcmodule!=null){
+        if (rcmodule!=null && canNotify()){
             Status status = new Status("ACCELCHANGE");
             rcmodule.postStatus(status);
+            updateLastNotificationTime();
         }
     }
 
@@ -68,12 +79,13 @@ public abstract class AAccelerationModule implements IAccelerationModule {
         for (IAccelerationListener listener : listeners){
             listener.onAcceleration(xaccel, yaccel,zaccel);
         }
-        if (rcmodule!=null){
+        if (rcmodule!=null && canNotify()){
             Status status = new Status("ACCELERATION");
             status.putContents("xaccel",xaccel+"");
             status.putContents("yaccel",yaccel+"");
             status.putContents("zaccel",zaccel+"");
             rcmodule.postStatus(status);
+            updateLastNotificationTime();
         }
     }
 

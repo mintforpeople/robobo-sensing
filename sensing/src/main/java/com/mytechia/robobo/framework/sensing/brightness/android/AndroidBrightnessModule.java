@@ -54,13 +54,7 @@ public class AndroidBrightnessModule extends ABrightnessModule {
 
     private float lastBrightnessValue = 0;
 
-    private int changedValue = 20;
-
-    private Timer brightnessTimer;
-
-    private int refreshRate = 250; //4 per second
-
-    private BrightnessTask task;
+    private int changedValue = 100;
 
 
     @Override
@@ -90,9 +84,14 @@ public class AndroidBrightnessModule extends ABrightnessModule {
                                                    lastBrightnessValue = brightnessValue;
                                                    brightnessValue = event.values[0];
 
-                                                   if (((lastBrightnessValue/brightnessValue)> changedValue)||((brightnessValue/lastBrightnessValue)> changedValue)){
+                                                   if (Math.abs(lastBrightnessValue-brightnessValue) > changedValue){
                                                        notifyBrightnessChange();
+                                                       //if changes are small we only notified at the limited rate, if changes are big, we force the notification
+                                                       notifyBrightness(brightnessValue, true);
                                                    }
+
+                                                   notifyBrightness(brightnessValue, false);
+
                                                }
 
                                                @Override
@@ -103,8 +102,6 @@ public class AndroidBrightnessModule extends ABrightnessModule {
                     lightSensor,
                     SensorManager.SENSOR_DELAY_NORMAL);
 
-            brightnessTimer = new Timer();
-            brightnessTimer.scheduleAtFixedRate(new BrightnessTask(),100,refreshRate);
         }
 
 
@@ -112,10 +109,7 @@ public class AndroidBrightnessModule extends ABrightnessModule {
 
     @Override
     public void shutdown() throws InternalErrorException {
-        if (brightnessTimer!=null) {
-            brightnessTimer.cancel();
-            brightnessTimer.purge();
-        }
+
     }
 
     @Override
@@ -125,24 +119,10 @@ public class AndroidBrightnessModule extends ABrightnessModule {
 
     @Override
     public String getModuleVersion() {
-        return "0.3.0";
+        return "0.3.3";
     }
 
 
-
-
-
-    @Override
-    public void setRefreshRate(int millis) {
-        refreshRate = millis;
-        if (brightnessTimer!=null){
-            task.cancel();
-            task = new BrightnessTask();
-            brightnessTimer.scheduleAtFixedRate(task, 100,refreshRate);
-            brightnessTimer.purge();
-
-        }
-    }
 
     @Override
     public float readBrightnessValue() {
@@ -154,12 +134,4 @@ public class AndroidBrightnessModule extends ABrightnessModule {
         changedValue = amount;
     }
 
-    private class BrightnessTask extends TimerTask{
-
-        @Override
-        public void run() {
-            //Log.d(TAG,"Notify Brightness");
-            notifyBrightness(brightnessValue);
-        }
-    }
 }

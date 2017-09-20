@@ -23,6 +23,7 @@ package com.mytechia.robobo.framework.sensing.orientation;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
+import com.mytechia.robobo.framework.sensing.ASensingModule;
 
 import java.util.HashSet;
 
@@ -30,10 +31,25 @@ import java.util.HashSet;
 /**
  * Abstract class managing listeners and status posting
  */
-public abstract class AOrientationModule implements IOrientationModule {
+public abstract class AOrientationModule extends ASensingModule implements IOrientationModule {
+
+    private static final long MAX_REMOTE_NOTIFICATION_PERIOD = 200; //ms
+
+    private final float minChange4Remote = 3; //3 degrees
+    private float lastYaw=0, lastPitch=0, lastRoll=0;
+
+    private long lastRemoteNotification = 0;
+
     private HashSet<IOrientationListener> listeners = new HashSet<IOrientationListener>();
     protected IRemoteControlModule remoteControlModule = null;
     protected RoboboManager m;
+
+
+    public AOrientationModule() {
+        super(MAX_REMOTE_NOTIFICATION_PERIOD); //max remote update period
+    }
+
+
     @Override
     public void suscribe(IOrientationListener listener) {
         listeners.add(listener);
@@ -55,17 +71,33 @@ public abstract class AOrientationModule implements IOrientationModule {
             listener.onOrientationChanged(yaw, pitch, roll);
         }
 
-        if (remoteControlModule != null){
+        if (remoteControlModule != null && canNotify() && hasChanged(yaw, pitch, roll)){
+
+            //period finished, we can notify again
 
             Status status = new Status("ORIENTATION");
-            status.putContents("yaw",String.valueOf(yaw));
-            status.putContents("pitch",String.valueOf(pitch));
-            status.putContents("roll",String.valueOf(roll));
+            status.putContents("yaw", String.valueOf(yaw));
+            status.putContents("pitch", String.valueOf(pitch));
+            status.putContents("roll", String.valueOf(roll));
 
             remoteControlModule.postStatus(status);
+
+            updateLastNotificationTime();
         }
 
     };
+
+    private boolean hasChanged(float yaw, float pitch, float roll) {
+        boolean changed = ((Math.abs(yaw-lastYaw)) > minChange4Remote);
+        changed = changed || (Math.abs(pitch-lastPitch) > minChange4Remote);
+        changed = changed || (Math.abs(roll-lastRoll) > minChange4Remote);
+
+        lastYaw = yaw;
+        lastPitch = pitch;
+        lastRoll = roll;
+
+        return changed;
+    }
 
 
 }

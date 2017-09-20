@@ -44,7 +44,7 @@ import com.mytechia.robobo.framework.sensing.orientation.IOrientationListener;
  */
 public class AndroidOrientationModule extends AOrientationModule implements SensorEventListener {
 
-    private static final int SENSOR_DELAY_MICROS = 250 * 1000; // 250ms, 4 per second
+    private static final int SENSOR_DELAY_MICROS = 200 * 1000; // 250ms, 5 per second
 
 
     private String TAG = "AndroidOrientation";

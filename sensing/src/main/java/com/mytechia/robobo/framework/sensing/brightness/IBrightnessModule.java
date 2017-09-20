@@ -30,11 +30,6 @@ import com.mytechia.robobo.framework.IModule;
  */
 public interface IBrightnessModule extends IModule {
 
-    /**
-     * Sets the time on milliseconds to send the brightness values
-     * @param millis The time on milliseconds
-     */
-    void setRefreshRate(int millis);
 
     /**
      * Reads the value from the brightness sensor

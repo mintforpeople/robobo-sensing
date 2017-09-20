@@ -23,6 +23,7 @@ package com.mytechia.robobo.framework.sensing.brightness;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
+import com.mytechia.robobo.framework.sensing.ASensingModule;
 
 import java.util.HashSet;
 
@@ -30,13 +31,17 @@ import java.util.HashSet;
 /**
  * Abstract class managing listeners and status posting
  */
-public abstract class ABrightnessModule implements IBrightnessModule {
+public abstract class ABrightnessModule extends ASensingModule implements IBrightnessModule {
+
+    private static final long MAX_REMOTE_NOTIFICATION_PERIOD = 500; //ms
+
     private HashSet<IBrightnessListener> listeners;
 
     protected IRemoteControlModule rcmodule = null;
     protected RoboboManager m;
 
     public ABrightnessModule(){
+        super(MAX_REMOTE_NOTIFICATION_PERIOD);
         listeners = new HashSet<IBrightnessListener>();
     }
 
@@ -56,15 +61,16 @@ public abstract class ABrightnessModule implements IBrightnessModule {
      * Used to notify the listeners of a new value
      * @param value
      */
-    protected void notifyBrightness(float value){
+    protected void notifyBrightness(float value, boolean forceNotification){
         for (IBrightnessListener listener:listeners){
             listener.onBrightness(value);
         }
 
-        if (rcmodule!=null){
+        if (rcmodule!=null && (canNotify() || forceNotification)) {
             Status s = new Status("BRIGHTNESS");
             s.putContents("level",String.valueOf(Math.round(value)));
             rcmodule.postStatus(s);
+            updateLastNotificationTime();
         }
     }
 
@@ -76,7 +82,7 @@ public abstract class ABrightnessModule implements IBrightnessModule {
             listener.onBrightnessChanged();
         }
 
-        if (rcmodule!=null){
+        if (rcmodule!=null && canNotify()){
             Status s = new Status("BRIGHTNESSCHANGED");
             rcmodule.postStatus(s);
         }

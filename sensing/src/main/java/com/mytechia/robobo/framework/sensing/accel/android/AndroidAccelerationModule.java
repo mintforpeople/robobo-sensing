@@ -43,7 +43,7 @@ import com.mytechia.robobo.framework.sensing.accel.AAccelerationModule;
  */
 public class AndroidAccelerationModule extends AAccelerationModule implements SensorEventListener {
 
-    private static final int SENSOR_DELAY_MICROS = 50 * 1000; // 50ms
+    private static final int SENSOR_DELAY_MICROS = 100 * 1000; // 50ms
 
 
     private String TAG = "AndroidAcceleration";
@@ -136,7 +136,6 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
                 lastx = x;
                 lasty = y;
                 lastz = z;
-
 
                 notifyAcceleration(Math.round(x), Math.round(y), Math.round(z));
             }
