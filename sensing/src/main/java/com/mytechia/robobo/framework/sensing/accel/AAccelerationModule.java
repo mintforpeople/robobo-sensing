@@ -34,7 +34,7 @@ import java.util.HashSet;
  */
 public abstract class AAccelerationModule extends ASensingModule implements IAccelerationModule {
 
-    private static final long MAX_REMOTE_NOTIFICATION_PERIOD = 250; //ms
+    private static final long MAX_REMOTE_NOTIFICATION_PERIOD = 200; //ms
 
     private HashSet<IAccelerationListener> listeners = new HashSet<IAccelerationListener>();
     protected IRemoteControlModule rcmodule = null;

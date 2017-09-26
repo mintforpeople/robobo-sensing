@@ -84,7 +84,7 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
         // Can be null if the sensor hardware is not available
 
         mAccelerationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, mAccelerationSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mAccelerationSensor, SENSOR_DELAY_MICROS);
     }
 
     @Override
