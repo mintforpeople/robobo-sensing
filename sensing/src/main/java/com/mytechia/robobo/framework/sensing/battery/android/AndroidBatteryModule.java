@@ -29,6 +29,8 @@ import android.os.BatteryManager;
 import com.mytechia.commons.framework.exception.InternalErrorException;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
+import com.mytechia.robobo.framework.power.IPowerModeListener;
+import com.mytechia.robobo.framework.power.PowerMode;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.sensing.battery.ABatteryModule;
 import com.mytechia.robobo.framework.sensing.battery.IBatteryModule;
@@ -40,20 +42,22 @@ import java.util.TimerTask;
 /**
  * Implementation of the Battery sensor module
  */
-public class AndroidBatteryModule extends ABatteryModule {
+public class AndroidBatteryModule extends ABatteryModule implements IPowerModeListener {
 
     private Context context;
     private Timer batterytimer;
     private TimerTask battTimerTask;
-    private static final int statusPeriod = 3000;
+    private int statusPeriod = 3000;
 
     @Override
     public void startup(RoboboManager manager){
         m = manager;
+
+        m.subscribeToPowerModeChanges(this);
+
         context = manager.getApplicationContext();
-        batterytimer = new Timer();
-        battTimerTask = new checkBatteryLevel();
-        batterytimer.schedule(battTimerTask,1000,statusPeriod);
+
+        enableBatterySensor();
 
         try {
             rcmodule = manager.getModuleInstance(IRemoteControlModule.class);
@@ -66,6 +70,32 @@ public class AndroidBatteryModule extends ABatteryModule {
     public void shutdown() throws InternalErrorException {
         batterytimer.cancel();
         batterytimer.purge();
+    }
+
+
+    private void enableBatterySensor() {
+
+        disableBatterySensor();
+
+        setRefreshInterval(statusPeriod);
+
+    }
+
+    private void disableBatterySensor() {
+        if (batterytimer != null) {
+            batterytimer.cancel();
+        }
+    }
+
+
+    @Override
+    public void onPowerModeChange(PowerMode newMode) {
+        if (newMode == PowerMode.LOWPOWER) {
+            disableBatterySensor();
+        }
+        else {
+            enableBatterySensor();
+        }
     }
 
     @Override
@@ -97,6 +127,7 @@ public class AndroidBatteryModule extends ABatteryModule {
         batterytimer = new Timer();
         battTimerTask = new checkBatteryLevel();
         batterytimer.schedule(battTimerTask,0,millis);
+        this.statusPeriod = millis;
     }
 
     /**

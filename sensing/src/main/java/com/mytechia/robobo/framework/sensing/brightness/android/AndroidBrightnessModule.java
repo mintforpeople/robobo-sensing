@@ -32,6 +32,8 @@ import com.mytechia.commons.framework.exception.InternalErrorException;
 import com.mytechia.robobo.framework.LogLvl;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
+import com.mytechia.robobo.framework.power.IPowerModeListener;
+import com.mytechia.robobo.framework.power.PowerMode;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.sensing.brightness.ABrightnessModule;
 
@@ -44,7 +46,7 @@ import java.util.TimerTask;
 /**
  * Implementation of the brightness sensing module
  */
-public class AndroidBrightnessModule extends ABrightnessModule {
+public class AndroidBrightnessModule extends ABrightnessModule implements IPowerModeListener {
 
     private Context context;
 
@@ -56,10 +58,15 @@ public class AndroidBrightnessModule extends ABrightnessModule {
 
     private int changedValue = 100;
 
+    private BrightnessSensorEventLister sensorListener;
+
 
     @Override
     public void startup(RoboboManager manager) throws InternalErrorException {
         m = manager;
+
+        m.subscribeToPowerModeChanges(this);
+
         context = manager.getApplicationContext();
         SensorManager sensorManager
                 = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
@@ -75,37 +82,52 @@ public class AndroidBrightnessModule extends ABrightnessModule {
         if (lightSensor == null){
             m.log(LogLvl.ERROR, TAG,"Brightness sensor not present on this device");
         }else {
+
             float max =  lightSensor.getMaximumRange();
 
-
-            sensorManager.registerListener(new SensorEventListener() {
-                                               @Override
-                                               public void onSensorChanged(SensorEvent event) {
-                                                   lastBrightnessValue = brightnessValue;
-                                                   brightnessValue = event.values[0];
-
-                                                   if (Math.abs(lastBrightnessValue-brightnessValue) > changedValue){
-                                                       notifyBrightnessChange();
-                                                       //if changes are small we only notified at the limited rate, if changes are big, we force the notification
-                                                       notifyBrightness(brightnessValue, true);
-                                                   }
-
-                                                   notifyBrightness(brightnessValue, false);
-
-                                               }
-
-                                               @Override
-                                               public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-                                               }
-                                           },
-                    lightSensor,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+            enableSensor();
 
         }
 
 
     }
+
+    private void enableSensor() {
+
+        if(this.sensorListener != null) {
+            disableSensor();
+        }
+
+        SensorManager sensorManager
+                = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
+        Sensor lightSensor
+                = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        this.sensorListener = new BrightnessSensorEventLister();
+        sensorManager.registerListener(
+                this.sensorListener,
+                lightSensor,
+                SensorManager.SENSOR_DELAY_NORMAL);
+
+    }
+
+
+    private void disableSensor() {
+        SensorManager sensorManager
+                = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
+        sensorManager.unregisterListener(this.sensorListener);
+    }
+
+
+    @Override
+    public void onPowerModeChange(PowerMode newMode) {
+        if (newMode == PowerMode.LOWPOWER) {
+            disableSensor();
+        }
+        else {
+            enableSensor();
+        }
+    }
+
 
     @Override
     public void shutdown() throws InternalErrorException {
@@ -133,5 +155,31 @@ public class AndroidBrightnessModule extends ABrightnessModule {
     public void setHasChangedAmount(int amount) {
         changedValue = amount;
     }
+
+
+    private class BrightnessSensorEventLister implements SensorEventListener {
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            lastBrightnessValue = brightnessValue;
+            brightnessValue = event.values[0];
+
+            if (Math.abs(lastBrightnessValue-brightnessValue) > changedValue){
+                notifyBrightnessChange();
+                //if changes are small we only notified at the limited rate, if changes are big, we force the notification
+                notifyBrightness(brightnessValue, true);
+            }
+
+            notifyBrightness(brightnessValue, false);
+
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+        }
+
+    }
+
 
 }

@@ -35,6 +35,8 @@ import com.mytechia.commons.framework.exception.InternalErrorException;
 import com.mytechia.robobo.framework.LogLvl;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
+import com.mytechia.robobo.framework.power.IPowerModeListener;
+import com.mytechia.robobo.framework.power.PowerMode;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.sensing.orientation.AOrientationModule;
 import com.mytechia.robobo.framework.sensing.orientation.IOrientationListener;
@@ -42,7 +44,7 @@ import com.mytechia.robobo.framework.sensing.orientation.IOrientationListener;
 /**
  * Implementation of the ROBOBO orientation sensing module
  */
-public class AndroidOrientationModule extends AOrientationModule implements SensorEventListener {
+public class AndroidOrientationModule extends AOrientationModule implements SensorEventListener, IPowerModeListener {
 
     private static final int SENSOR_DELAY_MICROS = 200 * 1000; // 250ms, 5 per second
 
@@ -65,6 +67,8 @@ public class AndroidOrientationModule extends AOrientationModule implements Sens
     public void startup(RoboboManager manager){
         m = manager;
 
+        m.subscribeToPowerModeChanges(this);
+
         context = manager.getApplicationContext();
 
         try {
@@ -75,14 +79,39 @@ public class AndroidOrientationModule extends AOrientationModule implements Sens
 
         mSensorManager = (SensorManager) context.getSystemService(Activity.SENSOR_SERVICE);
 
-        // Can be null if the sensor hardware is not available
-        mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY_MICROS);
+        enableOrientation();
     }
 
     @Override
     public void shutdown() throws InternalErrorException {
         mSensorManager.unregisterListener(this);
+    }
+
+
+    private void enableOrientation() {
+
+        disableOrientation();
+
+        mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        if (mRotationSensor != null) {
+            mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY_MICROS);
+        }
+
+    }
+
+    private void disableOrientation() {
+        mSensorManager.unregisterListener(this);
+    }
+
+
+    @Override
+    public void onPowerModeChange(PowerMode newMode) {
+        if (newMode == PowerMode.LOWPOWER) {
+            disableOrientation();
+        }
+        else {
+            enableOrientation();
+        }
     }
 
     @Override

@@ -69,9 +69,9 @@ public class MainActivity extends AppCompatActivity implements IOrientationListe
             }
 
             @Override
-            public void onError(String errorMsg) {
+            public void onError(Exception errorMsg) {
 
-                final String error = errorMsg;
+                final String error = errorMsg.getLocalizedMessage();
 
 
             }

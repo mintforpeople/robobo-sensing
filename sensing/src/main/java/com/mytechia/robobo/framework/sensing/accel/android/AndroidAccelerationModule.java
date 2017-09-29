@@ -34,6 +34,8 @@ import com.mytechia.commons.framework.exception.InternalErrorException;
 import com.mytechia.robobo.framework.LogLvl;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
+import com.mytechia.robobo.framework.power.IPowerModeListener;
+import com.mytechia.robobo.framework.power.PowerMode;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.sensing.accel.AAccelerationModule;
 
@@ -41,7 +43,7 @@ import com.mytechia.robobo.framework.sensing.accel.AAccelerationModule;
 /**
  * Implementation of the Acceleration module
  */
-public class AndroidAccelerationModule extends AAccelerationModule implements SensorEventListener {
+public class AndroidAccelerationModule extends AAccelerationModule implements SensorEventListener, IPowerModeListener {
 
     private static final int SENSOR_DELAY_MICROS = 100 * 1000; // 50ms
 
@@ -73,6 +75,8 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
         m = manager;
         context = manager.getApplicationContext();
 
+        m.subscribeToPowerModeChanges(this);
+
         try {
             rcmodule = manager.getModuleInstance(IRemoteControlModule.class);
         } catch (ModuleNotFoundException e) {
@@ -82,9 +86,8 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
         mSensorManager = (SensorManager) context.getSystemService(Activity.SENSOR_SERVICE);
 
         // Can be null if the sensor hardware is not available
+        enableAccelerometer();
 
-        mAccelerationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, mAccelerationSensor, SENSOR_DELAY_MICROS);
     }
 
     @Override
@@ -92,6 +95,27 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
         mSensorManager.unregisterListener(this);
 
     }
+
+
+    /** Susbcribes the module to the acceleration events
+     *
+     */
+    private void enableAccelerometer() {
+
+        disableAccelerometer();
+
+        mAccelerationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        mSensorManager.registerListener(this, mAccelerationSensor, SENSOR_DELAY_MICROS);
+    }
+
+    /** Unsubscribes the module from the acceleration events
+     *
+     */
+    private void disableAccelerometer() {
+        mAccelerationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        mSensorManager.unregisterListener(this);
+    }
+
 
     @Override
     public String getModuleInfo() {
@@ -106,7 +130,7 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         Sensor mySensor = sensorEvent.sensor;
-        if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+        if (mySensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             boolean notifychange = false;
             float x = sensorEvent.values[0];
             float y = sensorEvent.values[1];
@@ -155,5 +179,22 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
     @Override
     public void setCalibration(boolean activate) {
         calibrating = activate;
+    }
+
+
+    /** Enable or disable the reception of acceleration events depending on the robot power mode
+     *
+     * @param newMode new power mode
+     */
+    @Override
+    public void onPowerModeChange(PowerMode newMode) {
+
+        if (newMode == PowerMode.LOWPOWER) {
+            disableAccelerometer();
+        }
+        else {
+            enableAccelerometer();
+        }
+
     }
 }
