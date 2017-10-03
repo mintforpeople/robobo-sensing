@@ -27,7 +27,7 @@ package com.mytechia.robobo.framework.sensing.battery;
 public interface IBatteryListener {
     /**
      * Called when a new battery status arrives
-     * @param battlevel
+     * @param battlevel battery level value
      */
     void onNewBatteryStatus(int battlevel);
 }

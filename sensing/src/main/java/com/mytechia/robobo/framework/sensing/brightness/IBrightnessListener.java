@@ -28,7 +28,7 @@ public interface IBrightnessListener {
 
     /**
      * Notifies a new brightness value
-     * @param value
+     * @param value birghtness value
      */
     void onBrightness(float value);
 

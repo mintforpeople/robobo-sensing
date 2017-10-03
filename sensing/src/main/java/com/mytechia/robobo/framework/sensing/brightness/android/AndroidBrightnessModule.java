@@ -141,7 +141,7 @@ public class AndroidBrightnessModule extends ABrightnessModule implements IPower
 
     @Override
     public String getModuleVersion() {
-        return "0.3.3";
+        return "1.0.0";
     }
 
 

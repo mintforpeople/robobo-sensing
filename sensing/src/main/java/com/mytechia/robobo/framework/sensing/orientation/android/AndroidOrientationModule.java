@@ -42,7 +42,7 @@ import com.mytechia.robobo.framework.sensing.orientation.AOrientationModule;
 import com.mytechia.robobo.framework.sensing.orientation.IOrientationListener;
 
 /**
- * Implementation of the ROBOBO orientation sensing module
+ * Implementation of the ROBOBO orientation sensing module for android.
  */
 public class AndroidOrientationModule extends AOrientationModule implements SensorEventListener, IPowerModeListener {
 
@@ -63,6 +63,8 @@ public class AndroidOrientationModule extends AOrientationModule implements Sens
     private int lastpitch = 0;
 
     private Context context;
+
+
     @Override
     public void startup(RoboboManager manager){
         m = manager;
@@ -88,6 +90,8 @@ public class AndroidOrientationModule extends AOrientationModule implements Sens
     }
 
 
+    /** Enables the sensor by registening a listener of TYPE_ROTATION_VECTOR events.
+     */
     private void enableOrientation() {
 
         disableOrientation();
@@ -99,6 +103,8 @@ public class AndroidOrientationModule extends AOrientationModule implements Sens
 
     }
 
+    /** Disables the sensor by removing the listener
+     */
     private void disableOrientation() {
         mSensorManager.unregisterListener(this);
     }
@@ -121,7 +127,7 @@ public class AndroidOrientationModule extends AOrientationModule implements Sens
 
     @Override
     public String getModuleVersion() {
-        return "0.3.0";
+        return "1.0.0";
     }
 
 

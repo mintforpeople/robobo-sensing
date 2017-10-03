@@ -33,19 +33,21 @@ import com.mytechia.robobo.framework.power.IPowerModeListener;
 import com.mytechia.robobo.framework.power.PowerMode;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.sensing.battery.ABatteryModule;
-import com.mytechia.robobo.framework.sensing.battery.IBatteryModule;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 /**
- * Implementation of the Battery sensor module
+ * Implementation of the Battery sensor module for Android
+ *
+ * Uses a timer task to periodically notify the battery level of the smartphone
+ *
  */
 public class AndroidBatteryModule extends ABatteryModule implements IPowerModeListener {
 
     private Context context;
-    private Timer batterytimer;
+    private Timer batteryTimer;
     private TimerTask battTimerTask;
     private int statusPeriod = 3000;
 
@@ -68,11 +70,13 @@ public class AndroidBatteryModule extends ABatteryModule implements IPowerModeLi
 
     @Override
     public void shutdown() throws InternalErrorException {
-        batterytimer.cancel();
-        batterytimer.purge();
+        batteryTimer.cancel();
+        batteryTimer.purge();
     }
 
 
+    /** Enables the sensor and configures the notification period
+     */
     private void enableBatterySensor() {
 
         disableBatterySensor();
@@ -81,9 +85,11 @@ public class AndroidBatteryModule extends ABatteryModule implements IPowerModeLi
 
     }
 
+    /** Disables the sensor by cancelling the periodic task
+     */
     private void disableBatterySensor() {
-        if (batterytimer != null) {
-            batterytimer.cancel();
+        if (batteryTimer != null) {
+            batteryTimer.cancel();
         }
     }
 
@@ -105,7 +111,7 @@ public class AndroidBatteryModule extends ABatteryModule implements IPowerModeLi
 
     @Override
     public String getModuleVersion() {
-        return "0.3.0";
+        return "1.0.0";
     }
 
     @Override
@@ -124,9 +130,9 @@ public class AndroidBatteryModule extends ABatteryModule implements IPowerModeLi
 
     @Override
     public void setRefreshInterval(int millis) {
-        batterytimer = new Timer();
+        batteryTimer = new Timer();
         battTimerTask = new checkBatteryLevel();
-        batterytimer.schedule(battTimerTask,0,millis);
+        batteryTimer.schedule(battTimerTask,0,millis);
         this.statusPeriod = millis;
     }
 

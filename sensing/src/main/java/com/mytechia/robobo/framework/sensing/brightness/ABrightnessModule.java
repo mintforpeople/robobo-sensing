@@ -57,9 +57,10 @@ public abstract class ABrightnessModule extends ASensingModule implements IBrigh
         }
     }
 
-    /**
-     * Used to notify the listeners of a new value
-     * @param value
+    /** Notifies all listeners of a change in brightness
+     *
+     * @param value brightness value
+     * @param forceNotification forces the notificaion even at higher rate than the limit
      */
     protected void notifyBrightness(float value, boolean forceNotification){
         for (IBrightnessListener listener:listeners){

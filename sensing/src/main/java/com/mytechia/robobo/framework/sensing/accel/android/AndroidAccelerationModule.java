@@ -124,7 +124,7 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
 
     @Override
     public String getModuleVersion() {
-        return "0.3.0";
+        return "1.0.0";
     }
 
     @Override

@@ -23,8 +23,9 @@ package com.mytechia.robobo.framework.sensing.battery;
 import com.mytechia.robobo.framework.IModule;
 
 
-
-
+/** Interface of any Robobo 'battery module' that
+ * notifies the battery of the smartphone device
+ */
 public interface IBatteryModule extends IModule {
 
     /**
@@ -41,13 +42,13 @@ public interface IBatteryModule extends IModule {
 
     /**
      * Subscribe the listener to the battery stream
-     * @param listener
+     * @param listener the listener to receive events
      */
     void suscribe(IBatteryListener listener);
 
     /**
      * Unsiscribe the listener to the battery stream
-     * @param listener
+     * @param listener the listener to unsubscribe
      */
     void unsuscribe(IBatteryListener listener);
 }

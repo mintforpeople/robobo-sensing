@@ -25,7 +25,7 @@ import com.mytechia.robobo.framework.IModule;
 
 
 /**
- * Interface of the ROBOBO acceleration module
+ * Interface of the ROBOBO accelerometer module
  */
 public interface IAccelerationModule extends IModule {
 
@@ -48,8 +48,8 @@ public interface IAccelerationModule extends IModule {
     void setDetectionThreshold(int threshold);
 
     /**
-     * Starts a calibration
-     * @param activate
+     * Used to perform the calibration of P/T using the accelerometer
+     * @param activate activate calibration or not
      */
     void setCalibration(boolean activate);
 
