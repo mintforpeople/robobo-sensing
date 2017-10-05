@@ -24,7 +24,7 @@ package com.mytechia.robobo.framework.sensing.accel;
 public interface IAccelerationListener {
 
     void onAccelerationChange();
-    void onAcceleration(int xaccel, int yaccel, int zaccel);
+    void onAcceleration(double xaccel, double yaccel, double zaccel);
     void onCalibrationAngle(double angle);
 
 }

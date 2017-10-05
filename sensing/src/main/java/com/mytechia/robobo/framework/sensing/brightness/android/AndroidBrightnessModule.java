@@ -165,8 +165,7 @@ public class AndroidBrightnessModule extends ABrightnessModule implements IPower
             brightnessValue = event.values[0];
 
             if (Math.abs(lastBrightnessValue-brightnessValue) > changedValue){
-                notifyBrightnessChange();
-                //if changes are small we only notified at the limited rate, if changes are big, we force the notification
+                //if changes are small we only notify at the limited rate, if changes are big, we force the notification
                 notifyBrightness(brightnessValue, true);
             }
 

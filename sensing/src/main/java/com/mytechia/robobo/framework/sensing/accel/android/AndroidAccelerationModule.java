@@ -59,11 +59,11 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
 
     private Context context;
 
-    private int threshold = 20;
+    private double threshold = 0.08;
 
-    private float lastx = 0;
-    private float lasty = 0;
-    private float lastz = 0;
+    private double lastx = 0;
+    private double lasty = 0;
+    private double lastz = 0;
 
     private boolean calibrating = false;
 
@@ -131,38 +131,34 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
     public void onSensorChanged(SensorEvent sensorEvent) {
         Sensor mySensor = sensorEvent.sensor;
         if (mySensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+
             boolean notifychange = false;
             float x = sensorEvent.values[0];
             float y = sensorEvent.values[1];
             float z = sensorEvent.values[2];
 
-            if (Math.abs(lastx-x)>threshold){
+            if ((Math.abs(lastx)-x)>threshold){
                 notifychange = true;
             }
-            if (Math.abs(lastx-x)>threshold){
+            if ((Math.abs(lasty)-y)>threshold){
                 notifychange = true;
             }
-            if (Math.abs(lastx-x)>threshold){
+            if ((Math.abs(lastz)-z)>threshold){
                 notifychange = true;
-            }
-            if (notifychange){
-                notifyAccelerationChange();
             }
 
-//            Log.d(TAG,x+" "+y+" "+" "+z);
-//            Log.d(TAG,""+Math.toDegrees(Math.acos(y/Math.sqrt(x*x+y*y+z*z)))*Math.signum(z));
+            if (notifychange){
+                notifyAcceleration(x, y, z);
+                lastx = x;
+                lasty = y;
+                lastz = z;
+            }
+
+
             if (calibrating){
                 notifyCalibrationAngle(Math.toDegrees(Math.acos(y/Math.sqrt(x*x+y*y+z*z)))*Math.signum(z));
             }
 
-            if ((Math.round(x)!=Math.round(lastx))||(Math.round(y)!=Math.round(lasty))||(Math.round(z)!=Math.round(lastz))) {
-
-                lastx = x;
-                lasty = y;
-                lastz = z;
-
-                notifyAcceleration(Math.round(x), Math.round(y), Math.round(z));
-            }
         }
     }
 

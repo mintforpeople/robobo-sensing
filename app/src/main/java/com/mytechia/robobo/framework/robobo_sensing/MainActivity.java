@@ -145,18 +145,8 @@ public class MainActivity extends AppCompatActivity implements IOrientationListe
     }
 
     @Override
-    public void onAcceleration(final int xaccel, final int yaccel, final int zaccel) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-//                Log.d(TAG," ACCEL X: " + xaccel + " Y: " + yaccel + " Z: " + zaccel);
-//
-//                yawBar.setProgress(Math.round(xaccel));
-//                pitchBar.setProgress(Math.round(yaccel));
-//                rollBar.setProgress(Math.round(zaccel));
+    public void onAcceleration(final double xaccel, final double yaccel, final double zaccel) {
 
-            }
-        });
     }
 
     @Override

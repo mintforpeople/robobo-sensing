@@ -34,6 +34,8 @@ import java.util.HashSet;
  */
 public abstract class AAccelerationModule extends ASensingModule implements IAccelerationModule {
 
+    private static final String ACCELERATION_STATUS = "ACCELERATION";
+
     private static final long MAX_REMOTE_NOTIFICATION_PERIOD = 200; //ms
 
     private HashSet<IAccelerationListener> listeners = new HashSet<IAccelerationListener>();
@@ -58,6 +60,7 @@ public abstract class AAccelerationModule extends ASensingModule implements IAcc
     /**
      * Notifies a notable change on the acceleration
      */
+    @Deprecated
     protected void notifyAccelerationChange(){
         for (IAccelerationListener listener : listeners){
             listener.onAccelerationChange();
@@ -75,12 +78,12 @@ public abstract class AAccelerationModule extends ASensingModule implements IAcc
      * @param yaccel Acceleration on the y axis
      * @param zaccel Acceleration on the z axis
      */
-    protected void notifyAcceleration(int xaccel, int yaccel, int zaccel){
+    protected void notifyAcceleration(double xaccel, double yaccel, double zaccel){
         for (IAccelerationListener listener : listeners){
             listener.onAcceleration(xaccel, yaccel,zaccel);
         }
         if (rcmodule!=null && canNotify()){
-            Status status = new Status("ACCELERATION");
+            Status status = new Status(ACCELERATION_STATUS);
             status.putContents("xaccel",xaccel+"");
             status.putContents("yaccel",yaccel+"");
             status.putContents("zaccel",zaccel+"");

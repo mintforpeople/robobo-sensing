@@ -33,6 +33,7 @@ import java.util.HashSet;
  */
 public abstract class AOrientationModule extends ASensingModule implements IOrientationModule {
 
+    private static final String ORIENTATION_STATUS = "ORIENTATION";
     private static final long MAX_REMOTE_NOTIFICATION_PERIOD = 200; //ms
 
     private final float minChange4Remote = 3; //3 degrees
@@ -75,7 +76,7 @@ public abstract class AOrientationModule extends ASensingModule implements IOrie
 
             //period finished, we can notify again
 
-            Status status = new Status("ORIENTATION");
+            Status status = new Status(ORIENTATION_STATUS);
             status.putContents("yaw", String.valueOf(yaw));
             status.putContents("pitch", String.valueOf(pitch));
             status.putContents("roll", String.valueOf(roll));

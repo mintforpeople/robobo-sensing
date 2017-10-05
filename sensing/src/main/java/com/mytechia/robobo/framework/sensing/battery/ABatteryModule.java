@@ -33,6 +33,9 @@ import javax.crypto.spec.RC2ParameterSpec;
  * Abstract class managing listeners and status posting
  */
 public abstract class ABatteryModule implements IBatteryModule {
+
+    private static final String BATTERY_STATUS = "BAT_PHONE";
+
     protected HashSet<IBatteryListener> listeners = new HashSet<IBatteryListener>();
     protected IRemoteControlModule rcmodule = null;
     protected RoboboManager m;
@@ -55,8 +58,8 @@ public abstract class ABatteryModule implements IBatteryModule {
             l.onNewBatteryStatus(level);
         }
         if (rcmodule!=null){
-            Status s = new Status("OBOBATTLEV");
-            s.putContents("level",String.valueOf(level));
+            Status s = new Status(BATTERY_STATUS);
+            s.putContents("level", String.valueOf(level));
             rcmodule.postStatus(s);
         }
     }

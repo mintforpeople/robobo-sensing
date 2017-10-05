@@ -33,6 +33,7 @@ import java.util.HashSet;
  */
 public abstract class ABrightnessModule extends ASensingModule implements IBrightnessModule {
 
+    private static final String AMBIENTLIGHT_STATUS = "AMBIENTLIGHT";
     private static final long MAX_REMOTE_NOTIFICATION_PERIOD = 500; //ms
 
     private HashSet<IBrightnessListener> listeners;
@@ -68,7 +69,7 @@ public abstract class ABrightnessModule extends ASensingModule implements IBrigh
         }
 
         if (rcmodule!=null && (canNotify() || forceNotification)) {
-            Status s = new Status("BRIGHTNESS");
+            Status s = new Status(AMBIENTLIGHT_STATUS);
             s.putContents("level",String.valueOf(Math.round(value)));
             rcmodule.postStatus(s);
             updateLastNotificationTime();
@@ -78,6 +79,7 @@ public abstract class ABrightnessModule extends ASensingModule implements IBrigh
     /**
      * Used to notify the listeners of a substantial change on the sensor
      */
+    @Deprecated
     protected void notifyBrightnessChange(){
         for (IBrightnessListener listener:listeners){
             listener.onBrightnessChanged();
