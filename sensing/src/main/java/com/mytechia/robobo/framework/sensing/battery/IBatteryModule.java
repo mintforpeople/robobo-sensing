@@ -47,7 +47,7 @@ public interface IBatteryModule extends IModule {
     void suscribe(IBatteryListener listener);
 
     /**
-     * Unsiscribe the listener to the battery stream
+     * Unsuscribe the listener to the battery stream
      * @param listener the listener to unsubscribe
      */
     void unsuscribe(IBatteryListener listener);
