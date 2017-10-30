@@ -34,7 +34,7 @@ import javax.crypto.spec.RC2ParameterSpec;
  */
 public abstract class ABatteryModule implements IBatteryModule {
 
-    private static final String BATTERY_STATUS = "BAT_PHONE";
+    private static final String BATTERY_STATUS = "BAT-PHONE";
 
     protected HashSet<IBatteryListener> listeners = new HashSet<IBatteryListener>();
     protected IRemoteControlModule rcmodule = null;
