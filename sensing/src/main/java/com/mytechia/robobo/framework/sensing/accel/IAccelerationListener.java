@@ -22,9 +22,23 @@ package com.mytechia.robobo.framework.sensing.accel;
 
 
 public interface IAccelerationListener {
-
+    /**
+     * Triggered when a notable change in acceleration is detected
+     */
     void onAccelerationChange();
+
+    /**
+     * Notifies periodically the measured information on the acceleration sensor
+     * @param xaccel Acceleration on X axis
+     * @param yaccel Acceleration on Y axis
+     * @param zaccel Acceleration on Z axis
+     */
     void onAcceleration(double xaccel, double yaccel, double zaccel);
+
+    /**
+     * Used for calibration
+     * @param angle tilt angle
+     */
     void onCalibrationAngle(double angle);
 
 }
