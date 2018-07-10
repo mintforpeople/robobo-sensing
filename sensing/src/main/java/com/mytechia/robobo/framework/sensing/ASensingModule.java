@@ -34,7 +34,7 @@ package com.mytechia.robobo.framework.sensing;
 
 public abstract class ASensingModule {
 
-    private final long maxRemoteNotificationPeriod; //ms
+    private long maxRemoteNotificationPeriod; //ms
     private long lastNotificationTime = 0;
 
     public ASensingModule(long maxRemoteNotificationPeriod) {
@@ -47,6 +47,10 @@ public abstract class ASensingModule {
 
     protected void updateLastNotificationTime() {
         this.lastNotificationTime = System.currentTimeMillis();
+    }
+
+    protected void setMaxRemoteNotificationPeriod(long millis){
+        this.maxRemoteNotificationPeriod = millis;
     }
 
 }

@@ -21,6 +21,7 @@
 package com.mytechia.robobo.framework.sensing.brightness;
 
 import com.mytechia.robobo.framework.RoboboManager;
+import com.mytechia.robobo.framework.frequency.IFrequencyModeListener;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
 import com.mytechia.robobo.framework.sensing.ASensingModule;
@@ -31,7 +32,7 @@ import java.util.HashSet;
 /**
  * Abstract class managing listeners and status posting
  */
-public abstract class ABrightnessModule extends ASensingModule implements IBrightnessModule {
+public abstract class ABrightnessModule extends ASensingModule implements IBrightnessModule, IFrequencyModeListener {
 
     private static final String AMBIENTLIGHT_STATUS = "AMBIENTLIGHT";
     private static final long MAX_REMOTE_NOTIFICATION_PERIOD = 500; //ms

@@ -45,7 +45,7 @@ public interface IAccelerationModule extends IModule {
      * Sets the amount of change required to trigger a detection
      * @param threshold The amount of change required
      */
-    void setDetectionThreshold(int threshold);
+    void setDetectionThreshold(double threshold);
 
     /**
      * Used to perform the calibration of P/T using the accelerometer

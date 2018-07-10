@@ -35,6 +35,7 @@ import com.mytechia.commons.framework.exception.InternalErrorException;
 import com.mytechia.robobo.framework.LogLvl;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
+import com.mytechia.robobo.framework.frequency.FrequencyMode;
 import com.mytechia.robobo.framework.power.IPowerModeListener;
 import com.mytechia.robobo.framework.power.PowerMode;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
@@ -46,9 +47,12 @@ import com.mytechia.robobo.framework.sensing.orientation.IOrientationListener;
  */
 public class AndroidOrientationModule extends AOrientationModule implements SensorEventListener, IPowerModeListener {
 
-    private static final int SENSOR_DELAY_MICROS = 200 * 1000; // 250ms, 5 per second
+    private static final int SENSOR_DELAY_MICROS = 50 * 1000;
 
-
+    private static final long FREQUENCY_LOW = 500;
+    private static final long FREQUENCY_NORMAL = 200;
+    private static final long FREQUENCY_FAST = 50;
+    private static final long FREQUENCY_MAX = 10;
     private String TAG = "AndroidOrientation";
 
     private SensorManager mSensorManager;
@@ -183,5 +187,35 @@ public class AndroidOrientationModule extends AOrientationModule implements Sens
             lastroll = Math.round(roll);
             lastyaw = Math.round(yaw);
         }
+    }
+
+    @Override
+    public void onFrequencyModeChanged(FrequencyMode frequency) {
+        disableOrientation();
+
+        switch (frequency){
+
+            case LOW:
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_LOW);
+                this.setMinChange(1);
+
+                break;
+            case NORMAL:
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_NORMAL);
+                this.setMinChange(1);
+
+                break;
+            case FAST:
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_FAST);
+                this.setMinChange(1);
+
+                break;
+            case MAX:
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_MAX);
+                this.setMinChange(0);
+                break;
+        }
+        enableOrientation();
+
     }
 }
