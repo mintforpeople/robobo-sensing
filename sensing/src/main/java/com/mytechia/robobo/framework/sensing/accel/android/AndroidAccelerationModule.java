@@ -34,6 +34,7 @@ import com.mytechia.commons.framework.exception.InternalErrorException;
 import com.mytechia.robobo.framework.LogLvl;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
+import com.mytechia.robobo.framework.frequency.FrequencyMode;
 import com.mytechia.robobo.framework.power.IPowerModeListener;
 import com.mytechia.robobo.framework.power.PowerMode;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
@@ -45,9 +46,12 @@ import com.mytechia.robobo.framework.sensing.accel.AAccelerationModule;
  */
 public class AndroidAccelerationModule extends AAccelerationModule implements SensorEventListener, IPowerModeListener {
 
-    private static final int SENSOR_DELAY_MICROS = 100 * 1000; // 50ms
+    private static final int SENSOR_DELAY_MICROS = 50 * 1000; // 50ms
 
-
+    private static final long FREQUENCY_LOW = 500;
+    private static final long FREQUENCY_NORMAL = 200;
+    private static final long FREQUENCY_FAST = 50;
+    private static final long FREQUENCY_MAX = 10;
     private String TAG = "AndroidAcceleration";
 
     private SensorManager mSensorManager;
@@ -76,6 +80,7 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
         context = manager.getApplicationContext();
 
         m.subscribeToPowerModeChanges(this);
+        m.subscribeToFrequencyModeChanges(this);
 
         try {
             rcmodule = manager.getModuleInstance(IRemoteControlModule.class);
@@ -168,7 +173,7 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
     }
 
     @Override
-    public void setDetectionThreshold(int threshold) {
+    public void setDetectionThreshold(double threshold) {
         this.threshold = threshold;
     }
 
@@ -192,5 +197,33 @@ public class AndroidAccelerationModule extends AAccelerationModule implements Se
             enableAccelerometer();
         }
 
+    }
+
+    @Override
+    public void onFrequencyModeChanged(FrequencyMode frequency) {
+        disableAccelerometer();
+        switch (frequency){
+            case LOW:
+                this.setDetectionThreshold(threshold);
+
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_LOW);
+                break;
+            case NORMAL:
+                this.setDetectionThreshold(threshold);
+
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_NORMAL);
+                break;
+            case FAST:
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_FAST);
+                this.setDetectionThreshold(threshold/2);
+
+                break;
+            case MAX:
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_MAX);
+                this.setDetectionThreshold(0);
+
+                break;
+        }
+        enableAccelerometer();
     }
 }

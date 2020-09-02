@@ -21,6 +21,7 @@
 package com.mytechia.robobo.framework.sensing.orientation;
 
 import com.mytechia.robobo.framework.RoboboManager;
+import com.mytechia.robobo.framework.frequency.IFrequencyModeListener;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
 import com.mytechia.robobo.framework.remote_control.remotemodule.Status;
 import com.mytechia.robobo.framework.sensing.ASensingModule;
@@ -31,12 +32,12 @@ import java.util.HashSet;
 /**
  * Abstract class managing listeners and status posting
  */
-public abstract class AOrientationModule extends ASensingModule implements IOrientationModule {
+public abstract class AOrientationModule extends ASensingModule implements IOrientationModule, IFrequencyModeListener {
 
     private static final String ORIENTATION_STATUS = "ORIENTATION";
     private static final long MAX_REMOTE_NOTIFICATION_PERIOD = 200; //ms
 
-    private final float minChange4Remote = 3; //3 degrees
+    private float minChange4Remote = 1; //1 degree
     private float lastYaw=0, lastPitch=0, lastRoll=0;
 
     private long lastRemoteNotification = 0;
@@ -98,6 +99,10 @@ public abstract class AOrientationModule extends ASensingModule implements IOrie
         lastRoll = roll;
 
         return changed;
+    }
+
+    protected void setMinChange(int degrees){
+        this.minChange4Remote = degrees;
     }
 
 

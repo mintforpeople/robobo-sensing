@@ -32,6 +32,7 @@ import com.mytechia.commons.framework.exception.InternalErrorException;
 import com.mytechia.robobo.framework.LogLvl;
 import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.exception.ModuleNotFoundException;
+import com.mytechia.robobo.framework.frequency.FrequencyMode;
 import com.mytechia.robobo.framework.power.IPowerModeListener;
 import com.mytechia.robobo.framework.power.PowerMode;
 import com.mytechia.robobo.framework.remote_control.remotemodule.IRemoteControlModule;
@@ -49,6 +50,11 @@ import java.util.TimerTask;
 public class AndroidBrightnessModule extends ABrightnessModule implements IPowerModeListener {
 
     private Context context;
+    private static final long FREQUENCY_LOW = 1000;
+    private static final long FREQUENCY_NORMAL = 500;
+    private static final long FREQUENCY_FAST = 250;
+    private static final long FREQUENCY_MAX = 100;
+
 
     private String TAG = "AndroidBrightness";
 
@@ -106,7 +112,7 @@ public class AndroidBrightnessModule extends ABrightnessModule implements IPower
         sensorManager.registerListener(
                 this.sensorListener,
                 lightSensor,
-                SensorManager.SENSOR_DELAY_NORMAL);
+                SensorManager.SENSOR_DELAY_UI);
 
     }
 
@@ -154,6 +160,29 @@ public class AndroidBrightnessModule extends ABrightnessModule implements IPower
     @Override
     public void setHasChangedAmount(int amount) {
         changedValue = amount;
+    }
+
+    @Override
+    public void onFrequencyModeChanged(FrequencyMode frequency) {
+        switch (frequency){
+
+            case LOW:
+
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_LOW);
+                break;
+            case NORMAL:
+
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_NORMAL);
+                break;
+            case FAST:
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_FAST);
+
+                break;
+            case MAX:
+                this.setMaxRemoteNotificationPeriod(FREQUENCY_MAX);
+
+                break;
+        }
     }
 
 
